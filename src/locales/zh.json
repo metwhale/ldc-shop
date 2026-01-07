@@ -36,7 +36,11 @@
         "processing": "处理中...",
         "viewDetails": "查看详情",
         "reviews": "评价管理",
-        "dataExport": "数据导出"
+        "dataExport": "数据导出",
+        "categoriesManage": "分类管理",
+        "refundRequests": "退款申请",
+        "yes": "是",
+        "no": "否"
     },
     "home": {
         "title": "欢迎来到 LDC 商店",
@@ -57,6 +61,7 @@
         "title": "商品详情",
         "description": "商品描述",
         "noDescription": "暂无描述",
+        "hot": "热门",
         "loginToBuy": "请登录后购买此商品",
         "outOfStockMessage": "该商品暂时缺货",
         "productNotFound": "商品未找到",
@@ -71,6 +76,28 @@
         "shareCopy": "复制链接",
         "shareCopied": "链接已复制",
         "shareFailed": "复制失败"
+    },
+    "search": {
+        "title": "搜索",
+        "placeholder": "搜索商品...",
+        "search": "搜索",
+        "resultCount": "共 {{total}} 个结果",
+        "noResults": "没有结果",
+        "tryOther": "试试其他关键词或分类。",
+        "page": "第 {{page}} / {{totalPages}} 页",
+        "prev": "上一页",
+        "next": "下一页",
+        "sort": {
+            "hot": "热门"
+        }
+    },
+    "refund": {
+        "requestTitle": "申请退款",
+        "requestHint": "提交退款申请，等待管理员审核。",
+        "reasonPlaceholder": "退款原因（可选）...",
+        "requestButton": "提交申请",
+        "requested": "已提交退款申请",
+        "requestStatus": "当前状态：{{status}}"
     },
     "order": {
         "title": "订单详情",
@@ -110,6 +137,8 @@
             "shopNamePlaceholder": "请输入商店名称",
             "shopNameHint": "会显示在顶部导航与页面标题。",
             "save": "保存",
+            "lowStockThreshold": "库存预警阈值",
+            "saveThreshold": "保存阈值",
             "shopNameEmpty": "商店名称不能为空"
         },
         "export": {
@@ -137,20 +166,50 @@
             "date": "日期",
             "actions": "操作"
         },
+        "categories": {
+            "title": "分类管理",
+            "create": "新增分类",
+            "name": "名称",
+            "namePlaceholder": "例如 游戏",
+            "icon": "图标",
+            "iconPlaceholder": "例如 🎮",
+            "sortOrder": "排序",
+            "actions": "操作"
+        },
+        "refunds": {
+            "title": "退款申请",
+            "searchPlaceholder": "搜索订单 / 用户 / 商品...",
+            "order": "订单",
+            "user": "用户",
+            "product": "商品",
+            "reason": "原因",
+            "status": "状态",
+            "date": "日期",
+            "actions": "操作",
+            "approve": "同意",
+            "reject": "拒绝",
+            "adminNote": "管理员备注",
+            "adminNotePrompt": "可选：给该申请留个备注："
+        },
         "stats": {
             "today": "今日",
             "week": "近7天",
             "month": "本月",
             "total": "总计",
-            "visitors": "顾客数"
+            "visitors": "顾客数",
+            "lowStock": "库存预警",
+            "lowStockHint": "阈值 ≤ {{threshold}}",
+            "recentOrders": "最近订单"
         },
         "products": {
             "title": "商品管理",
             "addNew": "添加商品",
             "name": "名称",
             "price": "价格",
+            "hot": "热门",
             "category": "分类",
             "stock": "库存",
+            "lowStock": "预警",
             "order": "排序",
             "status": "状态",
             "active": "上架",
@@ -197,8 +256,11 @@
             "paidAt": "支付时间",
             "deliveredAt": "发货时间",
             "refund": "退款",
+            "refundProxy": "退款（服务端）",
             "markRefunded": "标记已退款",
             "refundConfirm": "这将在新标签页中打开退款页面。步骤：1. 在新标签页中完成退款 2. 在 Linux DO Credit 后台确认退款成功 3. 返回此处点击【标记已退款】继续？",
+            "refundProxyConfirm": "尝试通过服务端代理执行退款？（可能被 WAF 拦截）",
+            "refundProxyNotProcessed": "代理请求已返回但未确认成功；必要时请使用手动退款流程。",
             "refundVerify": "您是否已在 Linux DO Credit 后台确认退款成功？",
             "refundSuccess": "订单已标记为已退款",
             "refundInfo": "确认退款成功后，点击【标记已退款】"
@@ -206,7 +268,7 @@
         "cards": {
             "title": "库存管理",
             "addCards": "添加卡密",
-            "placeholder": "输入卡密，每行一个...",
+            "placeholder": "输入卡密，支持换行或逗号分隔...",
             "available": "可用",
             "used": "已使用",
             "noCards": "暂无卡密"
@@ -220,8 +282,11 @@
             "descPlaceholder": "请输入商品描述",
             "priceLabel": "价格（积分）",
             "pricePlaceholder": "0.00",
+            "compareAtPriceLabel": "原价（可选）",
+            "compareAtPricePlaceholder": "例如 99.00",
             "categoryLabel": "分类",
             "categoryPlaceholder": "通用",
+            "isHotLabel": "标记为热门",
             "imageLabel": "图片地址",
             "imagePlaceholder": "https://...",
             "saveButton": "保存商品",
@@ -241,10 +306,12 @@
     },
     "announcement": {
         "title": "公告管理",
+        "startAt": "开始时间（可选）",
+        "endAt": "结束时间（可选）",
         "placeholder": "输入公告内容...（留空则隐藏公告）",
         "save": "保存公告",
         "saved": "公告已保存！",
-        "hint": "此公告将显示在首页。留空则不显示公告。"
+        "hint": "公告会显示在首页；设置开始/结束时间后，仅在该时间段内展示。"
     },
     "review": {
         "title": "用户评价",

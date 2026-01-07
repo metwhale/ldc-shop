@@ -16,10 +16,12 @@ interface Product {
     name: string
     description: string | null
     price: string
+    compareAtPrice?: string | null
     image: string | null
     category: string | null
     stockCount: number
     soldCount: number
+    isHot?: boolean | null
     rating?: number
     reviewCount?: number
 }
@@ -28,9 +30,10 @@ interface HomeContentProps {
     products: Product[]
     announcement?: string | null
     visitorCount?: number
+    categories?: Array<{ name: string; icon: string | null; sortOrder: number }>
 }
 
-export function HomeContent({ products, announcement, visitorCount }: HomeContentProps) {
+export function HomeContent({ products, announcement, visitorCount, categories: categoryConfig }: HomeContentProps) {
     const { t } = useI18n()
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
     const [searchTerm, setSearchTerm] = useState("")
@@ -38,9 +41,13 @@ export function HomeContent({ products, announcement, visitorCount }: HomeConten
 
     // Extract unique categories
     const categories = useMemo(() => {
+        if (categoryConfig && categoryConfig.length) {
+            return [...categoryConfig].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0) || a.name.localeCompare(b.name))
+                .map(c => c.name)
+        }
         const uniqueCategories = new Set(products.map(p => p.category).filter(Boolean) as string[])
         return Array.from(uniqueCategories).sort()
-    }, [products])
+    }, [categoryConfig, products])
 
     // Filter products
     const filteredProducts = useMemo(() => {
@@ -160,7 +167,9 @@ export function HomeContent({ products, announcement, visitorCount }: HomeConten
                                         )}
                                         onClick={() => setSelectedCategory(category)}
                                     >
-                                        {category}
+                                        {categoryConfig?.length
+                                            ? `${categoryConfig.find(c => c.name === category)?.icon ? `${categoryConfig.find(c => c.name === category)?.icon} ` : ''}${category}`
+                                            : category}
                                     </Button>
                                 ))}
                             </div>
@@ -243,6 +252,14 @@ export function HomeContent({ products, announcement, visitorCount }: HomeConten
                                             </h3>
                                         </div>
 
+                                        {product.isHot && (
+                                            <div className="mb-2">
+                                                <Badge variant="default" className="bg-primary/15 text-primary border border-primary/30">
+                                                    {t('buy.hot')}
+                                                </Badge>
+                                            </div>
+                                        )}
+
                                         {/* Rating */}
                                         {product.reviewCount !== undefined && product.reviewCount > 0 && (
                                             <div className="flex items-center gap-2 mb-3">
@@ -265,7 +282,14 @@ export function HomeContent({ products, announcement, visitorCount }: HomeConten
                                     <CardFooter className="p-5 pt-0 flex items-end justify-between gap-3">
                                         <div className="shrink-0 flex flex-col">
                                             <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t('common.credits')}</span>
-                                            <span className="text-2xl font-bold font-mono tracking-tight">{Number(product.price)}</span>
+                                            <div className="flex items-end gap-2">
+                                                <span className="text-2xl font-bold font-mono tracking-tight">{Number(product.price)}</span>
+                                                {product.compareAtPrice && Number(product.compareAtPrice) > Number(product.price) && (
+                                                    <span className="text-xs text-muted-foreground line-through">
+                                                        {Number(product.compareAtPrice)}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="flex flex-col items-end gap-2 min-w-0">
                                             <div className="flex flex-wrap justify-end gap-1.5 opacity-80 hover:opacity-100 transition-opacity">

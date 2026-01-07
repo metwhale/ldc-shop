@@ -12,7 +12,7 @@ import {
 import { User } from "lucide-react"
 import { SignInButton } from "@/components/signin-button"
 import { SignOutButton } from "@/components/signout-button"
-import { HeaderLogo, HeaderNav, HeaderUserMenuItems, LanguageSwitcher } from "@/components/header-client-parts"
+import { HeaderLogo, HeaderNav, HeaderSearch, HeaderUserMenuItems, LanguageSwitcher } from "@/components/header-client-parts"
 import { ModeToggle } from "@/components/mode-toggle"
 import { getSetting, recordLoginUser } from "@/lib/db/queries"
 
@@ -42,6 +42,7 @@ export async function SiteHeader() {
                     <HeaderLogo adminName={firstAdminName} shopNameOverride={shopNameOverride} />
                     <HeaderNav isAdmin={isAdmin} />
                 </div>
+                <HeaderSearch />
                 <div className="flex flex-1 items-center justify-end space-x-4">
                     <nav className="flex items-center space-x-2">
                         <LanguageSwitcher />

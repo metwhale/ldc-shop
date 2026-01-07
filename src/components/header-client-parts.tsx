@@ -5,6 +5,9 @@ import { useI18n } from "@/lib/i18n/context"
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { ShoppingBag } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export function HeaderLogo({ adminName, shopNameOverride }: { adminName?: string; shopNameOverride?: string | null }) {
     const { t } = useI18n()
@@ -34,6 +37,30 @@ export function HeaderNav({ isAdmin }: { isAdmin: boolean }) {
                 </Link>
             )}
         </>
+    )
+}
+
+export function HeaderSearch() {
+    const { t } = useI18n()
+    const router = useRouter()
+    const [q, setQ] = useState("")
+
+    return (
+        <form
+            className="hidden md:block w-[320px]"
+            onSubmit={(e) => {
+                e.preventDefault()
+                const query = q.trim()
+                if (!query) return
+                router.push(`/search?q=${encodeURIComponent(query)}`)
+            }}
+        >
+            <Input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder={t('search.placeholder')}
+            />
+        </form>
     )
 }
 
