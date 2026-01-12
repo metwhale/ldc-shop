@@ -134,219 +134,206 @@ export function HomeContent({ products, announcement, visitorCount, categories: 
                 </section>
             )}
 
-            {typeof visitorCount === 'number' && (
-                <div className="mb-6 flex items-center">
-                    <Badge variant="secondary">
-                        {t('home.visitorCount', { count: visitorCount })}
-                    </Badge>
+            {/* Header Area with Visitor Count and Controls */}
+            <div className="flex flex-col gap-6 mb-8">
+                <div className="flex items-center justify-between">
+                    {typeof visitorCount === 'number' && (
+                        <Badge variant="secondary" className="px-3 py-1">
+                            {t('home.visitorCount', { count: visitorCount })}
+                        </Badge>
+                    )}
                 </div>
-            )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                {/* Sidebar / Topbar for Categories */}
-                <aside className="lg:col-span-1">
-                    <div className="sticky top-24 space-y-6">
-                        {/* Search Input */}
-                        <div className="relative">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+                {/* Top Toolbar: Search & Filter Pills */}
+                <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-card/50 p-1 rounded-xl">
+                    {/* Search Bar */}
+                    <div className="relative w-full md:w-72 shrink-0">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <Input
+                            placeholder={t('common.searchPlaceholder')}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-9 w-full bg-background border-border/50 focus:bg-background transition-all"
+                        />
+                    </div>
+
+                    {/* Horizontal Category Pills */}
+                    <div className="flex-1 w-full overflow-x-auto no-scrollbar pb-2 md:pb-0">
+                        <div className="flex gap-2">
+                            <Button
+                                variant={selectedCategory === null ? "default" : "outline"}
+                                size="sm"
+                                className={cn(
+                                    "rounded-full whitespace-nowrap transition-all duration-300",
+                                    selectedCategory === null ? "bg-primary shadow-md shadow-primary/20" : "bg-transparent border-dashed border-border hover:bg-muted"
+                                )}
+                                onClick={() => setSelectedCategory(null)}
                             >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            <Input
-                                placeholder={t('common.searchPlaceholder')}
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-9 bg-muted/50 border-muted-foreground/20 focus:bg-background transition-colors"
-                            />
-                        </div>
-
-                        <div className="space-y-4">
-                            <h2 className="text-lg font-semibold tracking-tight px-1 flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                                    <path d="M3 6h18" />
-                                    <path d="M7 12h10" />
-                                    <path d="M10 18h4" />
-                                </svg>
-                                {t('common.categories')}
-                            </h2>
-                            <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
+                                {t('common.all')}
+                            </Button>
+                            {categories.map(category => (
                                 <Button
-                                    variant={selectedCategory === null ? "default" : "ghost"}
+                                    key={category}
+                                    variant={selectedCategory === category ? "default" : "outline"}
+                                    size="sm"
                                     className={cn(
-                                        "justify-start whitespace-nowrap",
-                                        selectedCategory === null ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "hover:bg-muted"
+                                        "rounded-full capitalize whitespace-nowrap transition-all duration-300",
+                                        selectedCategory === category ? "bg-primary shadow-md shadow-primary/20" : "bg-transparent hover:bg-muted"
                                     )}
-                                    onClick={() => setSelectedCategory(null)}
+                                    onClick={() => setSelectedCategory(category)}
                                 >
-                                    {t('common.all')}
+                                    {categoryConfig?.length
+                                        ? `${categoryConfig.find(c => c.name === category)?.icon ? `${categoryConfig.find(c => c.name === category)?.icon} ` : ''}${category}`
+                                        : category}
                                 </Button>
-                                {categories.map(category => (
-                                    <Button
-                                        key={category}
-                                        variant={selectedCategory === category ? "default" : "ghost"}
-                                        className={cn(
-                                            "justify-start capitalize whitespace-nowrap",
-                                            selectedCategory === category ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "hover:bg-muted"
-                                        )}
-                                        onClick={() => setSelectedCategory(category)}
-                                    >
-                                        {categoryConfig?.length
-                                            ? `${categoryConfig.find(c => c.name === category)?.icon ? `${categoryConfig.find(c => c.name === category)?.icon} ` : ''}${category}`
-                                            : category}
-                                    </Button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="space-y-3">
-                            <h2 className="text-lg font-semibold tracking-tight px-1">{t('home.sort.title')}</h2>
-                            <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
-                                {[
-                                    { key: 'default', label: t('home.sort.default') },
-                                    { key: 'stockDesc', label: t('home.sort.stock') },
-                                    { key: 'soldDesc', label: t('home.sort.sold') },
-                                    { key: 'priceAsc', label: t('home.sort.priceAsc') },
-                                    { key: 'priceDesc', label: t('home.sort.priceDesc') },
-                                ].map(opt => (
-                                    <Button
-                                        key={opt.key}
-                                        type="button"
-                                        variant={sortKey === opt.key ? "default" : "ghost"}
-                                        className={cn(
-                                            "justify-start whitespace-nowrap",
-                                            sortKey === opt.key ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "hover:bg-muted"
-                                        )}
-                                        onClick={() => setSortKey(opt.key)}
-                                    >
-                                        {opt.label}
-                                    </Button>
-                                ))}
-                            </div>
+                            ))}
                         </div>
                     </div>
-                </aside>
 
-                {/* Main Product Grid */}
-                <section className="lg:col-span-3">
-                    {filteredProducts.length === 0 ? (
-                        <div className="text-center py-20 bg-muted/30 rounded-2xl border border-dashed border-muted-foreground/20">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-muted/50 mb-4">
-                                <svg className="w-8 h-8 text-muted-foreground/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
-                            </div>
-                            <p className="text-muted-foreground font-medium">{t('home.noProducts')}</p>
-                            <p className="text-sm text-muted-foreground/60 mt-2">{t('home.checkBackLater')}</p>
-                            {selectedCategory && (
-                                <Button variant="link" onClick={() => setSelectedCategory(null)} className="mt-4">
-                                    {t('common.all')}
-                                </Button>
-                            )}
+                    {/* Sort Dropdown (Simplified as inline buttons for now, or dropdown later) */}
+                    <div className="shrink-0 flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
+                        <span className="text-xs text-muted-foreground font-medium whitespace-nowrap hidden md:inline-block mr-1">{t('home.sort.title')}:</span>
+                        {[
+                            { key: 'default', label: t('home.sort.default'), icon: null },
+                            { key: 'stockDesc', label: t('home.sort.stock'), icon: '📦' },
+                            { key: 'priceAsc', label: 'Price ↑', icon: '💰' },
+                            { key: 'priceDesc', label: 'Price ↓', icon: '💰' },
+                        ].map(opt => (
+                            <Button
+                                key={opt.key}
+                                type="button"
+                                variant={sortKey === opt.key ? "secondary" : "ghost"}
+                                size="sm"
+                                className={cn(
+                                    "h-8 px-3 text-xs rounded-lg whitespace-nowrap",
+                                    sortKey === opt.key ? "bg-secondary font-medium text-secondary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                )}
+                                onClick={() => setSortKey(opt.key)}
+                            >
+                                {opt.key === 'priceAsc' ? t('home.sort.priceAsc') :
+                                    opt.key === 'priceDesc' ? t('home.sort.priceDesc') :
+                                        opt.label}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Product Grid (Full Width) */}
+            <section>
+                {filteredProducts.length === 0 ? (
+                    <div className="text-center py-20 bg-muted/30 rounded-2xl border border-dashed border-muted-foreground/20">
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-muted/50 mb-4">
+                            <svg className="w-8 h-8 text-muted-foreground/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                            {filteredProducts.map((product, index) => (
-                                <Card
-                                    key={product.id}
-                                    className="group overflow-hidden flex flex-col tech-card animate-fade-in"
-                                    style={{ animationDelay: `${index * 50}ms` }}
-                                >
-                                    {/* Image Section */}
-                                    <div className="aspect-[4/3] bg-gradient-to-br from-muted/30 to-muted/10 relative overflow-hidden">
-                                        <img
-                                            src={product.image || `https://api.dicebear.com/7.x/shapes/svg?seed=${product.id}`}
-                                            alt={product.name}
-                                            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                                        />
-                                        {/* Overlay gradient */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                        {product.category && product.category !== 'general' && (
-                                            <Badge className="absolute top-3 right-3 capitalize bg-background/80 backdrop-blur-sm border-border/50 text-foreground shadow-sm">
-                                                {product.category}
+                        <p className="text-muted-foreground font-medium">{t('home.noProducts')}</p>
+                        <p className="text-sm text-muted-foreground/60 mt-2">{t('home.checkBackLater')}</p>
+                        {selectedCategory && (
+                            <Button variant="link" onClick={() => setSelectedCategory(null)} className="mt-4">
+                                {t('common.all')}
+                            </Button>
+                        )}
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                        {filteredProducts.map((product, index) => (
+                            <Card
+                                key={product.id}
+                                className="group overflow-hidden flex flex-col tech-card animate-fade-in border-border/40 hover:border-primary/50 transition-colors"
+                                style={{ animationDelay: `${index * 50}ms` }}
+                            >
+                                {/* Image Section with aspect ratio tweak */}
+                                <div className="aspect-[16/10] bg-gradient-to-br from-muted/30 to-muted/10 relative overflow-hidden">
+                                    <img
+                                        src={product.image || `https://api.dicebear.com/7.x/shapes/svg?seed=${product.id}`}
+                                        alt={product.name}
+                                        className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                    {/* Overlay gradient */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    {product.category && product.category !== 'general' && (
+                                        <Badge className="absolute top-2 right-2 text-[10px] h-5 px-2 capitalize bg-background/60 backdrop-blur-md border border-white/20 text-foreground shadow-sm">
+                                            {product.category}
+                                        </Badge>
+                                    )}
+                                </div>
+
+                                {/* Content Section */}
+                                <CardContent className="flex-1 p-4">
+                                    <div className="flex items-start justify-between gap-2 mb-1.5">
+                                        <h3 className="font-semibold text-base group-hover:text-primary transition-colors duration-300 leading-snug line-clamp-1" title={product.name}>
+                                            {product.name}
+                                        </h3>
+                                    </div>
+
+                                    {product.isHot && (
+                                        <div className="mb-2">
+                                            <Badge variant="default" className="text-[10px] h-4 px-1 bg-primary/10 text-primary hover:bg-primary/20 border-0">
+                                                🔥 {t('buy.hot')}
                                             </Badge>
+                                        </div>
+                                    )}
+
+                                    {/* Rating */}
+                                    {product.reviewCount !== undefined && product.reviewCount > 0 && (
+                                        <div className="flex items-center gap-1.5 mb-2.5">
+                                            <StarRating rating={Math.round(product.rating || 0)} size="xs" />
+                                            <span className="text-[10px] text-muted-foreground font-medium">({product.reviewCount})</span>
+                                        </div>
+                                    )}
+
+                                    <div className="text-muted-foreground text-xs line-clamp-2 leading-relaxed opacity-80 h-8">
+                                        <ReactMarkdown
+                                            allowedElements={["text", "span"]}
+                                            unwrapDisallowed={true}
+                                        >
+                                            {product.description || t('buy.noDescription')}
+                                        </ReactMarkdown>
+                                    </div>
+                                </CardContent>
+
+                                {/* Footer Section */}
+                                <CardFooter className="p-4 pt-0 flex items-center justify-between gap-3 mt-auto border-t border-border/30 bg-muted/5">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className="text-sm font-semibold text-primary">{Number(product.price)}</span>
+                                            <span className="text-[10px] text-muted-foreground font-medium uppercase">{t('common.credits')}</span>
+                                        </div>
+                                        {product.compareAtPrice && Number(product.compareAtPrice) > Number(product.price) && (
+                                            <span className="text-[10px] text-muted-foreground/60 line-through -mt-1 block">
+                                                {Number(product.compareAtPrice)}
+                                            </span>
                                         )}
                                     </div>
 
-                                    {/* Content Section */}
-                                    <CardContent className="flex-1 p-5">
-                                        <div className="flex items-start justify-between gap-2 mb-2">
-                                            <h3 className="font-semibold text-lg group-hover:text-primary transition-colors duration-300 leading-tight">
-                                                {product.name}
-                                            </h3>
-                                        </div>
-
-                                        {product.isHot && (
-                                            <div className="mb-2">
-                                                <Badge variant="default" className="bg-primary/15 text-primary border border-primary/30">
-                                                    {t('buy.hot')}
-                                                </Badge>
-                                            </div>
-                                        )}
-
-                                        {/* Rating */}
-                                        {product.reviewCount !== undefined && product.reviewCount > 0 && (
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <StarRating rating={Math.round(product.rating || 0)} size="sm" />
-                                                <span className="text-xs text-muted-foreground font-medium">({product.reviewCount})</span>
-                                            </div>
-                                        )}
-
-                                        <div className="text-muted-foreground text-sm line-clamp-2 leading-relaxed prose prose-sm dark:prose-invert max-w-none [&_p]:m-0 [&_p]:inline [&_h1]:inline [&_h2]:inline [&_h3]:inline [&_h4]:inline [&_h5]:inline [&_h6]:inline [&_ul]:inline [&_ol]:inline [&_li]:inline">
-                                            <ReactMarkdown
-                                                allowedElements={["p", "strong", "em", "del", "text", "span"]}
-                                                unwrapDisallowed={true}
-                                            >
-                                                {product.description || t('buy.noDescription')}
-                                            </ReactMarkdown>
-                                        </div>
-                                    </CardContent>
-
-                                    {/* Footer Section */}
-                                    <CardFooter className="p-5 pt-0 flex items-end justify-between gap-3">
-                                        <div className="shrink-0 flex flex-col">
-                                            <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t('common.credits')}</span>
-                                            <div className="flex items-end gap-2">
-                                                <span className="text-2xl font-bold font-mono tracking-tight">{Number(product.price)}</span>
-                                                {product.compareAtPrice && Number(product.compareAtPrice) > Number(product.price) && (
-                                                    <span className="text-xs text-muted-foreground line-through">
-                                                        {Number(product.compareAtPrice)}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col items-end gap-2 min-w-0">
-                                            <div className="flex flex-wrap justify-end gap-1.5 opacity-80 hover:opacity-100 transition-opacity">
-                                                <Badge variant="outline" className="text-[10px] h-5 px-1.5 text-muted-foreground border-border/50 whitespace-nowrap">
-                                                    {t('common.sold')} {product.soldCount}
-                                                </Badge>
-                                                <Badge
-                                                    variant={product.stockCount > 0 ? "secondary" : "destructive"}
-                                                    className="text-[10px] h-5 px-1.5 whitespace-nowrap"
-                                                >
-                                                    {product.stockCount > 0 ? `${t('common.stock')} ${product.stockCount}` : t('common.outOfStock')}
-                                                </Badge>
-                                            </div>
-                                            <Link href={`/buy/${product.id}`} className="w-full">
-                                                <Button
-                                                    size="sm"
-                                                    className="w-full bg-foreground text-background hover:bg-foreground/90 whitespace-nowrap shadow-md hover:shadow-lg transition-all"
-                                                >
-                                                    {t('common.viewDetails')}
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-                    )}
-                </section>
-            </div>
+                                    <Link href={`/buy/${product.id}`}>
+                                        <Button
+                                            size="sm"
+                                            className={cn(
+                                                "h-8 px-4 text-xs font-medium rounded-full shadow-sm hover:shadow-md transition-all active:scale-95",
+                                                product.stockCount > 0 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted"
+                                            )}
+                                            disabled={product.stockCount <= 0}
+                                        >
+                                            {product.stockCount > 0 ? t('common.buy') : t('common.outOfStock')}
+                                        </Button>
+                                    </Link>
+                                </CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+            </section>
         </main>
     )
 }

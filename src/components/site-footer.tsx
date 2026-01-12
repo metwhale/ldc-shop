@@ -17,7 +17,7 @@ export function SiteFooter() {
                     {t('footer.poweredBy')}
                 </a>
                 <a href="https://github.com/chatgptuk/ldc-shop" target="_blank" rel="noreferrer" className="text-center text-xs text-muted-foreground/40 hover:text-primary transition-colors duration-300">
-                    v0.1.0
+                    v0.2.0
                 </a>
             </div>
         </footer>
