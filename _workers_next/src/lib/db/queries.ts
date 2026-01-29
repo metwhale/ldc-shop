@@ -922,7 +922,7 @@ export async function getProduct(id: string, options?: { isLoggedIn?: boolean; t
 }
 
 export async function getProductWithCardStats(id: string, options?: { isLoggedIn?: boolean; trustLevel?: number | null }) {
-    await ensureCardsColumns();
+    await ensureDatabaseInitialized();
     return await withProductColumnFallback(async () => {
         const nowMs = Date.now();
         const fiveMinutesAgo = nowMs - 5 * 60 * 1000;
@@ -981,6 +981,7 @@ export async function getProductWithCardStats(id: string, options?: { isLoggedIn
 }
 
 export async function getProductVisibility(id: string) {
+    await ensureDatabaseInitialized();
     return await withProductColumnFallback(async () => {
         const result = await db.select({
             id: products.id,
