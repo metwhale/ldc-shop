@@ -179,10 +179,7 @@ export function BuyContent({
                             <div className="relative">
                                 <div className="grid gap-0 lg:grid-cols-[minmax(0,0.98fr)_minmax(0,1.02fr)]">
                                     <div className="relative border-b border-border/20 p-5 md:p-6 lg:border-b-0 lg:border-r">
-                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.1),_transparent_60%)] dark:bg-[radial-gradient(circle_at_center,_rgba(96,165,250,0.14),_transparent_66%)]" />
-                                        <div className="relative flex h-full min-h-[18rem] items-center justify-center overflow-hidden rounded-[1.65rem] border border-border/30 bg-gradient-to-br from-primary/8 via-background to-secondary/30 p-5 md:min-h-[22rem] md:p-8">
-                                            <div className="pointer-events-none absolute left-6 top-6 h-16 w-16 rounded-full bg-primary/15 blur-2xl" />
-                                            <div className="pointer-events-none absolute bottom-6 right-6 h-20 w-20 rounded-full bg-cyan-400/10 blur-2xl" />
+                                        <div className="relative flex h-full min-h-[18rem] items-center justify-center overflow-hidden rounded-[1.65rem] bg-muted/40 ring-1 ring-border/20 ring-inset p-5 md:min-h-[22rem] md:p-8">
                                             {product.image ? (
                                                 <div className="relative aspect-[4/3] w-full max-w-[32rem]">
                                                     <Image
@@ -202,6 +199,7 @@ export function BuyContent({
                                                     </div>
                                                 </div>
                                             )}
+                                            <div className="pointer-events-none absolute inset-0 rounded-[1.65rem] ring-1 ring-black/[0.03] ring-inset dark:ring-white/[0.04]" />
                                         </div>
                                     </div>
 

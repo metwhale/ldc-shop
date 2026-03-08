@@ -174,8 +174,8 @@ export function HomeContent({ products, announcement, visitorCount, categories =
                 <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
                 <div className="relative px-6 py-5 md:px-8 md:py-6">
                     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                        <div className="min-w-0 space-y-2">
-                            <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl xl:text-4xl">
+                        <div className="min-w-0 space-y-1.5">
+                            <h1 className="bg-gradient-to-r from-foreground via-foreground/75 to-foreground/45 bg-clip-text text-lg font-medium tracking-tight text-transparent sm:text-xl">
                                 {t("home.title")}
                             </h1>
                             <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
@@ -301,7 +301,7 @@ export function HomeContent({ products, announcement, visitorCount, categories =
                                 <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.12),_transparent_32%)] opacity-80 dark:bg-[radial-gradient(circle_at_top_right,_rgba(96,165,250,0.14),_transparent_36%)]" />
 
-                                <div className="relative m-4 aspect-[4/3] overflow-hidden rounded-[1.45rem] border border-border/30 bg-gradient-to-br from-primary/8 via-background to-secondary/45">
+                                <div className="relative m-4 aspect-[4/3] overflow-hidden rounded-[1.45rem] bg-muted/40 ring-1 ring-border/20 ring-inset">
                                     {product.image ? (
                                         <Image
                                             src={product.image}
@@ -319,7 +319,7 @@ export function HomeContent({ products, announcement, visitorCount, categories =
                                             </div>
                                         </div>
                                     )}
-                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(255,255,255,0.1),_transparent_50%)] dark:bg-[radial-gradient(circle_at_bottom,_rgba(255,255,255,0.06),_transparent_55%)]" />
+                                    <div className="pointer-events-none absolute inset-0 rounded-[1.45rem] ring-1 ring-black/[0.03] ring-inset dark:ring-white/[0.04]" />
                                     <div className="absolute left-3 right-3 top-3 flex items-start justify-between gap-2">
                                         {product.category && product.category !== "general" ? (
                                             <Badge className="h-7 rounded-full border border-border/40 bg-background/86 px-3 text-[10px] font-medium capitalize text-foreground shadow-sm">
